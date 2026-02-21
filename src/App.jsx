@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './index.css';
 import { CRITERIA, CATEGORIES, GRADE_LABELS } from './criteria';
 import { buildShareUrl, parseShareUrl } from './shareUtils';
@@ -10,8 +10,6 @@ const STEP_SELF_GRADE = 2;
 const STEP_SHARE = 3;
 const STEP_COACH_GRADE = 4;
 const STEP_RESULTS = 5;
-
-const TOTAL_STEPS = 5;
 
 // ── GradePicker ─────────────────────────────────────
 function GradePicker({ value, onChange }) {
@@ -115,8 +113,8 @@ function ResultsTable({ selfGrades, coachGrades }) {
       </thead>
       <tbody>
         {CATEGORIES.map((cat) => (
-          <>
-            <tr key={cat} className="cat-header">
+          <React.Fragment key={cat}>
+            <tr className="cat-header">
               <td colSpan={3}>{cat}</td>
             </tr>
             {CRITERIA.filter((c) => c.category === cat).map((c) => (
@@ -134,12 +132,14 @@ function ResultsTable({ selfGrades, coachGrades }) {
                 </td>
               </tr>
             ))}
-          </>
+          </React.Fragment>
         ))}
       </tbody>
     </table>
   );
 }
+
+const MAX_NAME_LENGTH = 100;
 
 // ── Main App ─────────────────────────────────────────
 function getInitialState() {
@@ -156,16 +156,15 @@ function getInitialState() {
   return { step: STEP_NAME, name: '', selfGrades: {}, isCoachMode: false };
 }
 
-const initialState = getInitialState();
-
 export default function App() {
-  const [step, setStep] = useState(initialState.step);
-  const [name, setName] = useState(initialState.name);
-  const [selfGrades, setSelfGrades] = useState(initialState.selfGrades);
+  const [init] = useState(getInitialState);
+  const [step, setStep] = useState(init.step);
+  const [name, setName] = useState(init.name);
+  const [selfGrades, setSelfGrades] = useState(init.selfGrades);
   const [coachGrades, setCoachGrades] = useState({});
   const [shareUrl, setShareUrl] = useState('');
   const [copied, setCopied] = useState(false);
-  const isCoachMode = initialState.isCoachMode;
+  const isCoachMode = init.isCoachMode;
 
   const totalCriteria = CRITERIA.length;
   const selfGraded = Object.keys(selfGrades).length;
@@ -185,11 +184,22 @@ export default function App() {
     setStep(STEP_SHARE);
   }
 
-  function handleCopy() {
-    navigator.clipboard.writeText(shareUrl).then(() => {
+  async function handleCopy() {
+    if (!navigator.clipboard?.writeText) {
+      window.alert(
+        'Kopieren in die Zwischenablage wird von Ihrem Browser nicht unterstützt. Bitte kopieren Sie den Link manuell.'
+      );
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
-    });
+    } catch {
+      window.alert(
+        'Der Link konnte nicht in die Zwischenablage kopiert werden. Bitte kopieren Sie ihn manuell.'
+      );
+    }
   }
 
   function handleExportPdf() {
@@ -215,6 +225,7 @@ export default function App() {
                 type="text"
                 placeholder="Vor- und Nachname"
                 value={name}
+                maxLength={MAX_NAME_LENGTH}
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && name.trim() && setStep(STEP_SELF_GRADE)}
                 autoFocus
@@ -321,7 +332,6 @@ export default function App() {
                 grades={coachGrades}
                 onChange={handleCoachGrade}
                 compareGrades={selfGrades}
-                coachMode
               />
             ))}
             <div className="btn-row">

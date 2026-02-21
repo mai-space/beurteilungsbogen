@@ -1,5 +1,5 @@
 import { jsPDF } from 'jspdf';
-import { CRITERIA, CATEGORIES, GRADE_LABELS } from './criteria';
+import { CRITERIA, CATEGORIES } from './criteria';
 
 /**
  * Export a completed assessment as a PDF.
@@ -10,10 +10,19 @@ import { CRITERIA, CATEGORIES, GRADE_LABELS } from './criteria';
 export function exportPdf(studentName, selfGrades, coachGrades) {
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
   const pageW = doc.internal.pageSize.getWidth();
+  const pageH = doc.internal.pageSize.getHeight();
   const marginL = 15;
   const marginR = 15;
+  const marginBottom = 20;
   const contentW = pageW - marginL - marginR;
   let y = 20;
+
+  function checkPageBreak(neededHeight) {
+    if (y + neededHeight > pageH - marginBottom) {
+      doc.addPage();
+      y = 20;
+    }
+  }
 
   // Title
   doc.setFontSize(18);
@@ -55,6 +64,7 @@ export function exportPdf(studentName, selfGrades, coachGrades) {
     const criteria = CRITERIA.filter((c) => c.category === category);
 
     // Category row
+    checkPageBreak(7);
     doc.setFillColor(220, 230, 245);
     doc.rect(marginL, y, contentW, 7, 'F');
     doc.setFont('helvetica', 'bold');
@@ -65,6 +75,7 @@ export function exportPdf(studentName, selfGrades, coachGrades) {
     // Criteria rows
     criteria.forEach((c, i) => {
       const rowH = 9;
+      checkPageBreak(rowH);
       const fillColor = i % 2 === 0 ? [255, 255, 255] : [245, 248, 255];
       doc.setFillColor(...fillColor);
       doc.rect(marginL, y, contentW, rowH, 'F');
@@ -81,6 +92,7 @@ export function exportPdf(studentName, selfGrades, coachGrades) {
     y += 3;
   });
 
+  checkPageBreak(12);
   y += 4;
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
@@ -91,6 +103,7 @@ export function exportPdf(studentName, selfGrades, coachGrades) {
     { align: 'center' }
   );
 
-  const fileName = `Beurteilungsbogen_${studentName.replace(/\s+/g, '_')}.pdf`;
+  const safeName = studentName.replace(/[/\\:*?"<>|]/g, '').replace(/\s+/g, '_').slice(0, 80);
+  const fileName = `Beurteilungsbogen_${safeName}.pdf`;
   doc.save(fileName);
 }

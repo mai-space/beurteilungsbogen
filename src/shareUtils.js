@@ -7,7 +7,7 @@ export function encodeState(state) {
   const json = JSON.stringify(state);
   return btoa(
     encodeURIComponent(json).replace(/%([0-9A-F]{2})/g, (_, p1) =>
-      String.fromCharCode('0x' + p1)
+      String.fromCharCode(parseInt(p1, 16))
     )
   );
 }
