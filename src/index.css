@@ -1,0 +1,380 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary: #32508c;
+  --primary-light: #dce6f5;
+  --accent: #e8a020;
+  --bg: #f4f6fb;
+  --card-bg: #ffffff;
+  --text: #1a1a2e;
+  --muted: #6b7280;
+  --border: #d1d9e6;
+  --grade-hover: #e8f0fe;
+  --radius: 10px;
+  --shadow: 0 2px 12px rgba(50,80,140,0.10);
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Layout ───────────────────────────────────── */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 48px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.header h1 {
+  font-size: 1.8rem;
+  color: var(--primary);
+  margin: 0 0 6px;
+}
+
+.header p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  width: 100%;
+  max-width: 760px;
+}
+
+/* ── Step indicator ───────────────────────────── */
+.steps {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.step-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.step-dot.active {
+  background: var(--primary);
+  color: #fff;
+}
+
+.step-dot.done {
+  background: #22c55e;
+  color: #fff;
+}
+
+/* ── Form elements ────────────────────────────── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-group input[type="text"] {
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus {
+  border-color: var(--primary);
+}
+
+/* ── Buttons ──────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn:hover { opacity: 0.88; }
+.btn:active { transform: scale(0.97); }
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* ── Category / criteria ──────────────────────── */
+.category-block {
+  margin-bottom: 28px;
+}
+
+.category-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--primary);
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 2px solid var(--primary-light);
+}
+
+.criterion-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.criterion-row:last-child {
+  border-bottom: none;
+}
+
+.criterion-info {
+  flex: 1;
+}
+
+.criterion-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.criterion-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.grade-picker {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.grade-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--card-bg);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  color: var(--text);
+}
+
+.grade-btn:hover {
+  background: var(--grade-hover);
+  border-color: var(--primary);
+}
+
+.grade-btn.selected {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+
+/* ── Results table ────────────────────────────── */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  margin-top: 8px;
+}
+
+.results-table th {
+  background: var(--primary);
+  color: #fff;
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.results-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.results-table tr:nth-child(even) td {
+  background: var(--primary-light);
+}
+
+.results-table .cat-header td {
+  background: var(--primary-light);
+  font-weight: 700;
+  color: var(--primary);
+  font-size: 0.85rem;
+}
+
+/* ── Share box ────────────────────────────────── */
+.share-box {
+  background: var(--primary-light);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 20px;
+}
+
+.share-box p {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.share-url-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.share-url-row input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  background: #fff;
+  outline: none;
+}
+
+/* ── Coach mode banner ────────────────────────── */
+.coach-banner {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Grade badge ──────────────────────────────── */
+.grade-badge {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-align: center;
+  line-height: 28px;
+}
+
+.grade-badge.none {
+  background: var(--border);
+  color: var(--muted);
+}
+
+/* ── Progress bar ─────────────────────────────── */
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 99px;
+  height: 6px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: var(--primary);
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+/* ── Misc ─────────────────────────────────────── */
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 12px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.copied-msg {
+  color: #22c55e;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
